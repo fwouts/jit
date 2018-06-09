@@ -8,6 +8,12 @@
   version = "v1.3.0"
 
 [[projects]]
+  name = "github.com/deckarep/golang-set"
+  packages = ["."]
+  revision = "1d4478f51bed434f1dadf96dcd9b43aabac66795"
+  version = "v1.7"
+
+[[projects]]
   name = "github.com/fatih/color"
   packages = ["."]
   revision = "5b77d2a35fb0ede96d138fc9a99f5c9b6aef11b4"
@@ -24,6 +30,12 @@
   name = "github.com/google/go-querystring"
   packages = ["query"]
   revision = "53e6ce116135b80d037921a7fdd5138cf32d7a8a"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/libgit2/git2go"
+  packages = ["."]
+  revision = "14280de4da0f392935854a7cbdd67b2a5505c3a8"
 
 [[projects]]
   name = "github.com/mattn/go-colorable"
@@ -77,6 +89,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "9d874566d99c2e470610d5dda69468d5cd825745f8d5e2b223a832ecc1cd7d0e"
+  inputs-digest = "3ed925d96164c574920b10f636336325653e6fa77fbbf2dd627eeafc0d744f94"
   solver-name = "gps-cdcl"
   solver-version = 1
