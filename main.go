@@ -39,23 +39,28 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	branchPrefixes := mapset.NewSet()
-	i, err := repo.NewBranchIterator(git.BranchLocal)
+	defer repo.Free()
+	jiraKeysFromBranches := mapset.NewSet()
+	jiraKeyToBranchName := make(map[string]string)
+	branchIterator, err := repo.NewBranchIterator(git.BranchLocal)
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer branchIterator.Free()
 	jiraIssueFormat, err := regexp.Compile("^([A-Z]+-[0-9]+)")
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = i.ForEach(func(b *git.Branch, t git.BranchType) error {
+	err = branchIterator.ForEach(func(b *git.Branch, t git.BranchType) error {
 		name, err := b.Name()
 		if err != nil {
 			return err
 		}
 		res := jiraIssueFormat.FindStringSubmatch(name)
 		if len(res) > 0 {
-			branchPrefixes.Add(res[1])
+			jiraKey := res[1]
+			jiraKeysFromBranches.Add(jiraKey)
+			jiraKeyToBranchName[jiraKey] = name
 		}
 		return nil
 	})
@@ -92,27 +97,85 @@ func main() {
 			colouredPriority = color.GreenString(issue.Fields.Priority.Name)
 		}
 		var summary string
-		if branchPrefixes.Contains(issue.Key) {
+		if jiraKeysFromBranches.Contains(issue.Key) {
 			summary = fmt.Sprintf("*%s %v (%s): %+v", issue.Key, colouredPriority, issue.Fields.Type.Name, issue.Fields.Summary)
 		} else {
 			summary = fmt.Sprintf("%s %v (%s): %+v", issue.Key, colouredPriority, issue.Fields.Type.Name, issue.Fields.Summary)
 		}
 		choices[i] = summary
 	}
-	questions := []*survey.Question{
-		{
-			Name: "issue",
-			Prompt: &survey.Select{
-				Message: "Choose an issue:",
-				Options: choices,
-			},
-		},
-	}
-	answers := struct {
-		Issue string
-	}{}
-	err = survey.Ask(questions, &answers)
+	var pickedIssue string
+	err = survey.AskOne(&survey.Select{
+		Message: "Choose an issue:",
+		Options: choices,
+	}, &pickedIssue, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
+	jiraKey := strings.TrimPrefix(strings.Split(pickedIssue, " ")[0], "*")
+	var branchName *string
+	if jiraKeysFromBranches.Contains(jiraKey) {
+		// Switch to the existing branch.
+		b := jiraKeyToBranchName[jiraKey]
+		branchName = &b
+	} else {
+		// Create a new branch.
+		branchName, err = createBranch(repo, jiraKey)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	checkoutBranch(repo, *branchName)
+}
+
+func createBranch(repo *git.Repository, jiraKey string) (*string, error) {
+	var branchName string
+	survey.AskOne(&survey.Input{
+		Message: "Enter a branch name:",
+		Default: jiraKey,
+	}, &branchName, nil)
+	master, err := repo.LookupBranch("origin/master", git.BranchRemote)
+	if err != nil {
+		return nil, err
+	}
+	defer master.Free()
+	lastCommit, err := repo.LookupCommit(master.Target())
+	if err != nil {
+		return nil, err
+	}
+	defer lastCommit.Free()
+	branch, err := repo.CreateBranch(branchName, lastCommit, false)
+	if err != nil {
+		return nil, err
+	}
+	defer branch.Free()
+	return &branchName, err
+}
+
+func checkoutBranch(repo *git.Repository, branchName string) {
+	branch, err := repo.LookupBranch(branchName, git.BranchLocal)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer branch.Free()
+
+	commit, err := repo.LookupCommit(branch.Target())
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer commit.Free()
+
+	tree, err := repo.LookupTree(commit.TreeId())
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer tree.Free()
+
+	err = repo.CheckoutTree(tree, &git.CheckoutOpts{
+		Strategy: git.CheckoutSafe,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	repo.SetHead("refs/heads/" + branchName)
 }
