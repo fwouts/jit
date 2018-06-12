@@ -10,12 +10,13 @@ import (
 	"gopkg.in/AlecAivazis/survey.v1"
 	"log"
 	"os"
+	"path"
 	"regexp"
 	"strings"
 )
 
 func main() {
-	cwd, err := os.Getwd()
+	gitRepoPath, err := findGitRepo()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,7 +36,7 @@ func main() {
 		log.Fatal("Please set a Jira API token with --jira-token.")
 	}
 
-	repo, err := git.OpenRepository(*repoPath)
+	repo, err := git.OpenRepository(*gitRepoPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -129,6 +130,24 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func findGitRepo() (*string, error) {
+	potentialGitRepoPath, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+	for potentialGitRepoPath != "/" {
+		_, err := os.Stat(path.Join(potentialGitRepoPath, ".git"))
+		if err == nil {
+			return &potentialGitRepoPath, nil
+		} else if os.IsNotExist(err) {
+			potentialGitRepoPath = path.Join(potentialGitRepoPath, "..")
+		} else {
+			return nil, err
+		}
+	}
+	return nil, errors.New("please call Jit from a Git repository")
 }
 
 func createBranch(repo *git.Repository, jiraKey string) (*string, error) {
