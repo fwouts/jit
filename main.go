@@ -1,12 +1,13 @@
 package main
 
 import (
-	"flag"
+	"errors"
 	"fmt"
 	"github.com/andygrunwald/go-jira"
 	"github.com/deckarep/golang-set"
 	"github.com/fatih/color"
 	"github.com/libgit2/git2go"
+	"github.com/zenclabs/jit/config"
 	"gopkg.in/AlecAivazis/survey.v1"
 	"log"
 	"os"
@@ -20,20 +21,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	repoPath := flag.String("repo", cwd, "Path to the git repository")
-	jiraHost := flag.String("jira-host", "", "URL of the Jira Cloud host")
-	jiraUsername := flag.String("jira-user", "", "Jira username")
-	jiraToken := flag.String("jira-token", "", "Jira API token")
-	flag.Parse()
-
-	if *jiraHost == "" {
-		log.Fatal("Please set a Jira host with --jira-host.")
-	}
-	if *jiraUsername == "" {
-		log.Fatal("Please set a Jira username with --jira-user.")
-	}
-	if *jiraToken == "" {
-		log.Fatal("Please set a Jira API token with --jira-token.")
+	config, err := config.Load(*gitRepoPath)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	repo, err := git.OpenRepository(*gitRepoPath)
@@ -70,10 +60,10 @@ func main() {
 	}
 
 	tp := jira.BasicAuthTransport{
-		Username: strings.TrimSpace(*jiraUsername),
-		Password: strings.TrimSpace(*jiraToken),
+		Username: strings.TrimSpace(config.Jira.User),
+		Password: strings.TrimSpace(config.Jira.Token),
 	}
-	api, err := jira.NewClient(tp.Client(), *jiraHost)
+	api, err := jira.NewClient(tp.Client(), config.Jira.Host)
 	if err != nil {
 		log.Fatal(err)
 	}
