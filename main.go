@@ -125,7 +125,10 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-	checkoutBranch(repo, *branchName)
+	err = checkoutBranch(repo, *branchName)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func createBranch(repo *git.Repository, jiraKey string) (*string, error) {
@@ -152,22 +155,22 @@ func createBranch(repo *git.Repository, jiraKey string) (*string, error) {
 	return &branchName, err
 }
 
-func checkoutBranch(repo *git.Repository, branchName string) {
+func checkoutBranch(repo *git.Repository, branchName string) error {
 	branch, err := repo.LookupBranch(branchName, git.BranchLocal)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer branch.Free()
 
 	commit, err := repo.LookupCommit(branch.Target())
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer commit.Free()
 
 	tree, err := repo.LookupTree(commit.TreeId())
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer tree.Free()
 
@@ -175,7 +178,8 @@ func checkoutBranch(repo *git.Repository, branchName string) {
 		Strategy: git.CheckoutSafe,
 	})
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	repo.SetHead("refs/heads/" + branchName)
+	return nil
 }
