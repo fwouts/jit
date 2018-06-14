@@ -5,11 +5,14 @@ import (
 	"github.com/zenclabs/jit/config"
 	"github.com/zenclabs/jit/repo"
 	"github.com/zenclabs/jit/ui"
+	"github.com/zenclabs/jit/versioning"
 	"gopkg.in/AlecAivazis/survey.v1"
 	"log"
 )
 
 func main() {
+	versioning.CheckNewRelease()
+
 	gitRepoPath, err := repo.Locate()
 	if err != nil {
 		log.Fatal(err)

@@ -33,6 +33,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/hashicorp/go-version"
+  packages = ["."]
+  revision = "23480c0665776210b5fbbac6eaaee40e3e6a96b7"
+
+[[projects]]
+  branch = "master"
   name = "github.com/libgit2/git2go"
   packages = ["."]
   revision = "14280de4da0f392935854a7cbdd67b2a5505c3a8"
@@ -95,6 +101,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "fe825dce434eccd924ee1caa7ecc714592fba630cd04d76575d5acd8b9c3d4cb"
+  inputs-digest = "61f5af103c86235e8af8e5adabb5b56008f31b2755ab28c62cb62cf6a3a6fe31"
   solver-name = "gps-cdcl"
   solver-version = 1
