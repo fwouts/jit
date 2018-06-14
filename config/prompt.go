@@ -55,6 +55,7 @@ func Prompt(configFilePath string, existingConfig *Config) (*Config, error) {
 			Name: "token",
 			Prompt: &survey.Input{
 				Message: "Enter a Jira API token:",
+				Help:    "See https://confluence.atlassian.com/cloud/api-tokens-938839638.html for instructions.",
 				Default: (func() string {
 					if existingConfig != nil {
 						return existingConfig.Jira.Token
