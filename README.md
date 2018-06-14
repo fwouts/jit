@@ -17,6 +17,10 @@ In particular, use `jit` directly from your shell to:
 - Run `chmod +x jit`.
 - Call `jit` from within any Git repository.
 
+## Updating
+
+`jit` checks for updates regularly. You will know when a new version is available.
+
 ## Usage
 
 ```sh
