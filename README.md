@@ -13,22 +13,20 @@ In particular, use `jit` directly from your shell to:
 
 ## Installation
 
-`jit` isn't yet fully implemented. Check in again in July 2018 or watch this repo!
+- Download `jit` from https://github.com/zenclabs/jit/releases.
+- Run `chmod +x jit`.
+- Call `jit` from within any Git repository.
 
 ## Usage
 
 ```sh
-# Print the list of Jira tickets assigned to you, and relevant Git branches.
-jit list
-
-# Check out or create a Git branch for a Jira ticket.
-jit start
+# Print the list of Jira tickets assigned to you, pick a branch.
+jit
 
 # Would you like more commands? Please add feature requests in the Issues section.
 ```
 
 # Configuration
 
-`jit` will ask for your configuration details the first time you use it. You can adjust your settings anytime by editing:
-- local repository configuration: `.jit/config.yaml` at the root of the Git repository
-- global configuration: `~/.jit/config.yaml`
+`jit` will ask for your configuration details the first time you use it. You can adjust your settings anytime by editing
+`.jit/config.yaml` at the root of the Git repository.
