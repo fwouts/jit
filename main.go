@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/libgit2/git2go"
 	"github.com/zenclabs/jit/config"
 	"github.com/zenclabs/jit/repo"
@@ -64,9 +65,11 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		fmt.Printf("Created a new branch %s\n", *branchName)
 	}
 	err = repo.CheckoutBranch(r, *branchName)
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Printf("Checked out branch %s\n", *branchName)
 }
