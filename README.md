@@ -14,6 +14,7 @@ In particular, use `jit` directly from your shell to:
 ## Installation
 
 - Download `jit` from https://github.com/zenclabs/jit/releases.
+- Run `brew install libgit2` (or install it some other way).
 - Run `chmod +x jit`.
 - Call `jit` from within any Git repository.
 
