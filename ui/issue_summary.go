@@ -14,20 +14,31 @@ func IssueSummary(issue *jira.Issue, hasBranch bool) string {
 	case "Low":
 		colouredPriority = color.GreenString(issue.Fields.Priority.Name)
 	case "Medium":
-		colouredPriority = color.BlueString(issue.Fields.Priority.Name)
+		colouredPriority = color.HiCyanString(issue.Fields.Priority.Name)
 	case "High":
 		colouredPriority = color.MagentaString(issue.Fields.Priority.Name)
 	case "Critical":
+		colouredPriority = color.RedString(issue.Fields.Priority.Name)
 	case "Blocker":
 		colouredPriority = color.RedString(issue.Fields.Priority.Name)
 	default:
 		colouredPriority = color.GreenString(issue.Fields.Priority.Name)
 	}
-	var summary string
+	var colouredStatus string
+	bracketedStatus := fmt.Sprintf("[%s]", issue.Fields.Status.Name)
+	switch issue.Fields.Status.StatusCategory.ColorName {
+	case "yellow":
+		colouredStatus = color.YellowString(bracketedStatus)
+	case "green":
+		colouredStatus = color.GreenString(bracketedStatus)
+	case "blue-gray":
+		colouredStatus = color.HiBlueString(bracketedStatus)
+	default:
+		colouredStatus = color.HiBlueString(bracketedStatus)
+	}
+	summary := fmt.Sprintf("%s: %+v %v %v", issue.Key, issue.Fields.Summary, colouredPriority, colouredStatus)
 	if hasBranch {
-		summary = fmt.Sprintf("*%s %v (%s): %+v", issue.Key, colouredPriority, issue.Fields.Type.Name, issue.Fields.Summary)
-	} else {
-		summary = fmt.Sprintf("%s %v (%s): %+v", issue.Key, colouredPriority, issue.Fields.Type.Name, issue.Fields.Summary)
+		summary = "*" + summary
 	}
 	return summary
 }
