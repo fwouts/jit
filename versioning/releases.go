@@ -13,7 +13,7 @@ var releasesURL = fmt.Sprintf("https://api.github.com/repos/%s/%s/releases", git
 
 // Release is one particular release of `jit`.
 type Release struct {
-	URL     string `json:"url"`
+	URL     string `json:"html_url"`
 	TagName string `json:"tag_name"`
 }
 
