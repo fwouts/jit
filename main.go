@@ -37,7 +37,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	issues, _, err := api.Issue.Search("assignee = currentUser()", nil)
+	issues, _, err := api.Issue.Search("assignee = currentUser() order by created desc", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
