@@ -1,4 +1,9 @@
 # jit
+
+[![CircleCI](https://circleci.com/gh/zenclabs/jit.svg?style=svg)](https://circleci.com/gh/zenclabs/jit)
+[![Maintainability](https://api.codeclimate.com/v1/badges/97750ad7149bd2ec1c48/maintainability)](https://codeclimate.com/github/zenclabs/jit/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/97750ad7149bd2ec1c48/test_coverage)](https://codeclimate.com/github/zenclabs/jit/test_coverage)
+
 A command-line tool to simplify Git workflows for Jira users
 
 ## Introduction
