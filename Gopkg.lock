@@ -8,6 +8,18 @@
   version = "v1.3.0"
 
 [[projects]]
+  name = "github.com/codegangsta/inject"
+  packages = ["."]
+  revision = "37d7f8432a3e684eef9b2edece76bdfa6ac85b39"
+  version = "v1.0-rc1"
+
+[[projects]]
+  name = "github.com/codeskyblue/go-sh"
+  packages = ["."]
+  revision = "b097669b1569203c3ce05a6b8717d43140fdb3d5"
+  version = "0.2"
+
+[[projects]]
   name = "github.com/deckarep/golang-set"
   packages = ["."]
   revision = "1d4478f51bed434f1dadf96dcd9b43aabac66795"
@@ -57,6 +69,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/maxmclau/gput"
+  packages = ["."]
+  revision = "ebaca00f693d425d5daa34f0661a14e81c6f5b0b"
+
+[[projects]]
+  branch = "master"
   name = "github.com/mgutz/ansi"
   packages = ["."]
   revision = "9520e82c474b0a04dd04f8a40959027271bab992"
@@ -101,6 +119,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "61f5af103c86235e8af8e5adabb5b56008f31b2755ab28c62cb62cf6a3a6fe31"
+  inputs-digest = "5086eb5b5291dd61a85f2e6f77282cd298b89abadf9b69ce31bb6d7df1487c9f"
   solver-name = "gps-cdcl"
   solver-version = 1

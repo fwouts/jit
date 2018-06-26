@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/libgit2/git2go"
+	"github.com/maxmclau/gput"
 	"github.com/zenclabs/jit/config"
 	"github.com/zenclabs/jit/repo"
 	"github.com/zenclabs/jit/ui"
@@ -56,6 +57,8 @@ func main() {
 	err = survey.AskOne(&survey.Select{
 		Message: "Choose an issue:",
 		Options: choices,
+		// Show as many issues as can fit on the screen. Leave space for the message.
+		PageSize: gput.Lines() - 2,
 	}, &pickedIssue, nil)
 	if err != nil {
 		log.Fatal(err)
