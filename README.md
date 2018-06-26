@@ -39,4 +39,4 @@ jit
 # Configuration
 
 `jit` will ask for your configuration details the first time you use it. You can adjust your settings anytime by editing
-`.jit/config.yaml` at the root of the Git repository.
+`.jit/config.yaml` in your home directory.
