@@ -9,6 +9,7 @@ import (
 	"github.com/zenclabs/jit/versioning"
 	"gopkg.in/AlecAivazis/survey.v1"
 	"log"
+	"os/user"
 )
 
 func main() {
@@ -18,7 +19,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	c, err := config.Load(*gitRepoPath)
+
+	usr, err := user.Current()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c, err := config.Load(usr.HomeDir, *gitRepoPath)
 	if err != nil {
 		log.Fatal(err)
 	}
